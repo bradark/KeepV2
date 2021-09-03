@@ -1,0 +1,267 @@
+
+<html>
+      <head>
+        <title>Keep - Inventory Management</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="file:///C:/Users/bradl/Documents/GitHub/KeepV2/views/login.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a class="navbar-brand" href="#"><img src="http://assets.stickpng.com/thumbs/6093b240f00f260004e3f133.png" alt="Girl in a jacket" width="50" height="50">Keep</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                <a class="nav-link" id="login" href="#">Login <span class="sr-only">(current)</span> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="about" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pricing" href="#">Pricing</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="register" href="#">Register</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </head>
+      <body id="body">
+        <div class="modal fade" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div class="loader-txt">
+                  <h1> Login </h1>
+                  <%- include ('./partials/messages') %>
+                  <form action="/users/login" method="POST">
+                  <div>
+                  <label for="email">Email</label>
+                  <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter Email"
+                  />
+                  </div>
+                  <div>
+                      <label for="password">Password</label>
+                      <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter Password"
+                      />
+
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Login</button>
+
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wrapper">
+          <canvas style="position:absolute; top:100; left:0; width:100%;" id="canvas" ></canvas>
+          <canvas style="position:absolute; top:250; left:100; width:100%;" id="canvas2" ></canvas>
+        </div>
+        <canvas style="width:100%" id="canvas"></canvas>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+          //Get the canvas element.
+          var canvas = document.getElementById('canvas2');
+          canvas.width = canvas.clientWidth * 2;
+          canvas.height = canvas.clientHeight * 2;
+
+//Get the context for the canvas.
+          var context = canvas.getContext('2d');
+          context.scale(2, 2);
+
+//The text that we want to write.
+          var text = 'An Inventory Management Tool';
+
+//Set the font size and the fontface to use.
+          context.font = '45px Courier New';
+
+//Set the color of the text. This can be
+//an RGB color or a textual description
+//such as red.
+          context.fillStyle = '1,0,0';
+
+//The X coordinate where to start
+          var x = 20;
+
+//The Y coordinate where to start
+          var y = 50;
+
+//Use the fillText method to draw the text.
+          context.fillText(text, x, y);
+        </script>
+        <script>window.requestAnimFrame = function()
+          {
+            return (
+              window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              window.oRequestAnimationFrame      ||
+              window.msRequestAnimationFrame     ||
+              function(/* function */ callback){
+                window.setTimeout(callback, 1000 / 60);
+              }
+            );
+        }();
+
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+
+        //get DPI
+        let dpi = window.devicePixelRatio || 1;
+        context.scale(dpi, dpi);
+        console.log(dpi);
+
+        function fix_dpi() {
+        //get CSS height
+        //the + prefix casts it to an integer
+        //the slice method gets rid of "px"
+        let style_height = +getComputedStyle(canvas).getPropertyValue("height").slice(0, -2);
+        let style_width = +getComputedStyle(canvas).getPropertyValue("width").slice(0, -2);
+
+        //scale the canvas
+        canvas.setAttribute('height', style_height * dpi);
+        canvas.setAttribute('width', style_width * dpi);
+        }
+
+          var particle_count = 70,
+            particles = [],
+            couleurs   = ["#3a0088", "#930077", "#e61c5d","#ffbd39"];
+            function Particle()
+            {
+
+                this.radius = Math.round((Math.random()*3)+5);
+                this.x = Math.floor((Math.random() * ((+getComputedStyle(canvas).getPropertyValue("width").slice(0, -2) * dpi) - this.radius + 1) + this.radius));
+                this.y = Math.floor((Math.random() * ((+getComputedStyle(canvas).getPropertyValue("height").slice(0, -2) * dpi) - this.radius + 1) + this.radius));
+                this.color = couleurs[Math.floor(Math.random()*couleurs.length)];
+                this.speedx = Math.round((Math.random()*201)+0)/100;
+                this.speedy = Math.round((Math.random()*201)+0)/100;
+
+                switch (Math.round(Math.random()*couleurs.length))
+                {
+                    case 1:
+                    this.speedx *= 1;
+                    this.speedy *= 1;
+                    break;
+                    case 2:
+                    this.speedx *= -1;
+                    this.speedy *= 1;
+                    break;
+                    case 3:
+                    this.speedx *= 1;
+                    this.speedy *= -1;
+                    break;
+                    case 4:
+                    this.speedx *= -1;
+                    this.speedy *= -1;
+                    break;
+                }
+
+                this.move = function()
+                {
+
+                    context.beginPath();
+                    context.globalCompositeOperation = 'source-over';
+                    context.fillStyle   = this.color;
+                    context.globalAlpha = 1;
+                    context.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
+                    context.fill();
+                    context.closePath();
+
+                    this.x = this.x + this.speedx;
+                    this.y = this.y + this.speedy;
+
+                    if(this.x <= 0+this.radius)
+                    {
+                        this.speedx *= -1;
+                    }
+                    if(this.x >= canvas.width-this.radius)
+                    {
+                        this.speedx *= -1;
+                    }
+                    if(this.y <= 0+this.radius)
+                    {
+                        this.speedy *= -1;
+                    }
+                    if(this.y >= canvas.height-this.radius)
+                    {
+                        this.speedy *= -1;
+                    }
+
+                    for (var j = 0; j < particle_count; j++)
+                    {
+                        var particleActuelle = particles[j],
+                            yd = particleActuelle.y - this.y,
+                            xd = particleActuelle.x - this.x,
+                            d  = Math.sqrt(xd * xd + yd * yd);
+
+                        if ( d < 200 )
+                        {
+                            context.beginPath();
+                            context.globalAlpha = (200 - d) / (200 - 0);
+                            context.globalCompositeOperation = 'destination-over';
+                            context.lineWidth = 1;
+                            context.moveTo(this.x, this.y);
+                            context.lineTo(particleActuelle.x, particleActuelle.y);
+                            context.strokeStyle = this.color;
+                            context.lineCap = "round";
+                            context.stroke();
+                            context.closePath();
+                        }
+                    }
+                };
+            };
+            for (var i = 0; i < particle_count; i++)
+            {
+                fix_dpi();
+                var particle = new Particle();
+                particles.push(particle);
+            }
+
+
+            function animate()
+            {
+                fix_dpi();
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                for (var i = 0; i < particle_count; i++)
+                {
+                    particles[i].move();
+                }
+                requestAnimFrame(animate);
+            }
+
+
+
+
+            animate();
+
+
+            $('#login').click(function () {
+              $('#loadMe').modal({
+                  backdrop: "static", //remove ability to close modal with click
+                  keyboard: false, //remove option to close with keyboard
+                  show: true //Display loader!
+                });
+            });
+
+            $('body').on('click', '#body', function () {
+              $('#loadMe').modal('hide');
+            });
+
+            //$('#loadMe').modal('hide');
+</script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+
+    </body>
+</html>
