@@ -35,8 +35,10 @@ app.use((req,res,next)=> {
     next();
     })
 
+app.use(express.static("resources"));
+
 //Routes
 app.use('/',require('./routes/index'));
 app.use('/users',require('./routes/users'));
 
-app.listen(3000); 
+app.listen(3000);
