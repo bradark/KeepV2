@@ -14,10 +14,10 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" id="login" href="#">Dashboard</a>
+                <a class="nav-link" id="login" href="/dashboard">Dashboard</a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" id="about" href="/users/inventory">Inventory<span class="sr-only">(current)</span></a>
+                <a class="nav-link" id="about" href="/inventory">Inventory<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" id="pricing" href="#">Sales</a>
@@ -33,9 +33,66 @@
         </nav>
       </head>
       <body id="body">
+        <div class="modal show" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-body text-center">
+                <div class="loader"></div>
+                <div class="loader-txt">
+                  <h1> Add Item </h1>
+                  <%- include ('./partials/messages') %>
+                  <form action="/items/additem" method="POST">
+                    <div style="padding:10px;" class="container">
+                      <div>
+                          <input
+                            style="padding:10px;"
+                            name="itemname"
+                            placeholder="Enter Item Name..."
+                          />
+                      </div>
+                      <div>
+                          <input
+                            style="padding:10px;"
+                            name="itemdescription"
+                            placeholder="Enter Item Description..."
+                          />
+
+                      </div>
+                      <div>
+                          <input
+                            style="padding:10px;"
+                            name="itemsku"
+                            placeholder="Enter Item SKU..."
+                          />
+
+                      </div>
+                      <div>
+                          <input
+                            style="padding:10px;"
+                            name="itemvalue"
+                            placeholder="Enter Item Value..."
+                          />
+
+                      </div>
+                      <button type="submit" class="btn btn-primary btn-block">Add Item</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <h1 style="padding:50px;">Inventory,</h1>
         <div id="card">
           <div class="container">
+            <div class="d-flex flex-row">
+              <div class="p-2" style="padding:10px;">
+                <a id="additembtn" href="#" class="btn btn-success" >+ Add Item</a>
+              </div>
+              <div class="p-2" style="padding:10px;">
+                <a id="trackgmailbtn" href="#" class="btn btn-warning" >+ Track Gmail</a>
+              </div>
+            </div>
             <table data-url='x' id="table" data-toggle="table" class="table table-light">
               <thead class="thead-light">
                 <tr line-height="50px">
@@ -59,7 +116,7 @@
             $('#table').bootstrapTable("load", data);
           }
 
-            $('#login').click(function () {
+            $('#additembtn').click(function () {
               $('#loadMe').modal({
                   backdrop: "static", //remove ability to close modal with click
                   keyboard: false, //remove option to close with keyboard

@@ -38,6 +38,7 @@ app.use((req,res,next)=> {
 app.use(express.static("resources"));
 
 //Routes
+app.use('/items',require('./routes/items'));
 app.use('/',require('./routes/index'));
 app.use('/users',require('./routes/users'));
 
