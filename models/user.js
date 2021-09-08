@@ -23,6 +23,11 @@ inventory :{
   required  : false
 } ,
 
+sales :{
+  type : [],
+  required : false
+} ,
+
 intransitcount :{
   type  : String,
   required : false,

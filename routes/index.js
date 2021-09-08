@@ -22,4 +22,10 @@ router.get('/inventory',ensureAuthenticated,(req,res)=>{
     });
 })
 
+router.get('/sales', ensureAuthenticated, (req, res) =>{
+  res.render('sales',{
+    user: req.user
+  });
+})
+
 module.exports = router;

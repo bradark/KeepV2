@@ -39,6 +39,7 @@ app.use(express.static("resources"));
 
 //Routes
 app.use('/items',require('./routes/items'));
+app.use('/sales',require('./routes/sales'));
 app.use('/',require('./routes/index'));
 app.use('/users',require('./routes/users'));
 
