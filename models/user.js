@@ -13,8 +13,13 @@ password :{
     required : true
 } ,
 
-gmailtoken :{
+authlink :{
   type  : String,
+  required  : true
+} ,
+
+gmailtoken :{
+  type  : {},
   required  : false,
   default : 0
 } ,

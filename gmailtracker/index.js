@@ -29,16 +29,20 @@ module.exports.getMessages = function (keepEmail){
 
  /** Creates an OAuth2 Client which is then passed to listmessages*/
 function authorize(credentials, keepEmail, callback) {
-  const {client_secret, client_id, redirect_uris} = credentials.installed;
-  const oAuth2Client = new google.auth.OAuth2(
-      client_id, client_secret, redirect_uris[0]);
-
-  // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client, keepEmail);
-  });
+  console.log(keepEmail);
+  User.find(
+    {email: keepEmail},
+    function(err, docs){
+      const {client_secret, client_id} = credentials.installed;
+      const oAuth2Client = new google.auth.OAuth2(client_id, client_secret);
+      console.log(docs[0]);
+      var token = (docs[0]).gmailtoken;
+      oAuth2Client.setCredentials({
+        refresh_token: token
+      });
+      callback(oAuth2Client, keepEmail);
+    }
+  );
 }
 
 /**
@@ -47,30 +51,6 @@ function authorize(credentials, keepEmail, callback) {
  * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
  * @param {getEventsCallback} callback The callback for the authorized client.
  */
-function getNewToken(oAuth2Client, callback) {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES,
-  });
-  console.log('Authorize this app by visiting this url:', authUrl);
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-  rl.question('Enter the code from that page here: ', (code) => {
-    rl.close();
-    oAuth2Client.getToken(code, (err, token) => {
-      if (err) return console.error('Error retrieving access token', err);
-      oAuth2Client.setCredentials(token);
-      // Store the token to disk for later program executions
-      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-        if (err) return console.error(err);
-        console.log('Token stored to', TOKEN_PATH);
-      });
-      callback(oAuth2Client);
-    });
-  });
-}
 
 /**
  * Lists the labels in the user's account.
@@ -78,7 +58,7 @@ function getNewToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listMessages(auth, keepEmail) {
-  const gmail = google.gmail({version: 'v1', auth});
+  const gmail = google.gmail({version: 'v1', auth: auth});
   gmail.users.messages.list({
     userId: 'me',
   }, (err, res) => {

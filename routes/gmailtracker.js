@@ -12,7 +12,7 @@ router.post('/getmail', ensureAuthenticated, (req, res) => {
   GmailTracker.getMessages(req.user.email);
   setTimeout(function(){
     res.redirect('/gmailtracker');
-  }, 1000);
+  }, 2000);
 })
 
 module.exports = router;

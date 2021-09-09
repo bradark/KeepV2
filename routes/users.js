@@ -50,10 +50,13 @@ passport.authenticate('local',{
             errors.push({msg: 'email already registered'});
             res.render('register',{errors,name,email,password,password2})
            } else {
+             var splitEmail = email.split('@');
+             var authlink = "/getAuthUrl/" + splitEmail[0] + "%40" + splitEmail[1];
             const newUser = new User({
                 name : name,
                 email : email,
-                password : password
+                password : password,
+                authlink : authlink
             });
 
             //hash password
