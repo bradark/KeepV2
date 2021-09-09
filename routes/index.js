@@ -28,4 +28,10 @@ router.get('/sales', ensureAuthenticated, (req, res) =>{
   });
 })
 
+router.get('/gmailtracker', ensureAuthenticated, (req, res) =>{
+  res.render('gmailtracker',{
+    user: req.user
+  });
+})
+
 module.exports = router;

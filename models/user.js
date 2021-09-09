@@ -12,6 +12,13 @@ password :{
     type  : String,
     required : true
 } ,
+
+gmailtoken :{
+  type  : String,
+  required  : false,
+  default : 0
+} ,
+
 inventorycount :{
   type  : String,
   required : false,
@@ -19,6 +26,11 @@ inventorycount :{
 } ,
 
 inventory :{
+  type  : [],
+  required  : false
+} ,
+
+mail :{
   type  : [],
   required  : false
 } ,

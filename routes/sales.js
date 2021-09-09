@@ -26,9 +26,10 @@ router.post('/addsale', ensureAuthenticated, (req, res) => {
 })
 
 router.post('/marksold', ensureAuthenticated, (req, res) => {
+  var removeBtn = "<form action=\"/sales/removesale/" + req.body.saleitem + "\" method=\"POST\"><button type=\"submit\" id=\"removebtn\" class=\"btn btn-danger\" >Remove</button></form>";
   User.update(
     {email:req.user.email},
-    { $push: {sales: {saleitem:req.body.saleitem, salemethod:req.body.salemethod, saleprice:req.body.saleprice, saleprofit:req.body.saleprofit}}},
+    { $push: {sales: {saleitem:req.body.saleitem, salemethod:req.body.salemethod, saleprice:req.body.saleprice, saleprofit:req.body.saleprofit, removebtn:removeBtn}}},
     function(err, docs){
       if(err){
         console.log(err);

@@ -6,6 +6,8 @@ const expressEjsLayout = require('express-ejs-layouts')
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require("passport");
+const https = require('https');
+const gmailTracker = require('./gmailtracker/index.js');
 
 //passport config:
 require('./config/passport')(passport)
@@ -39,8 +41,11 @@ app.use(express.static("resources"));
 
 //Routes
 app.use('/items',require('./routes/items'));
+app.use('/gmailtracker',require('./routes/gmailtracker'));
 app.use('/sales',require('./routes/sales'));
 app.use('/',require('./routes/index'));
 app.use('/users',require('./routes/users'));
 
-app.listen(3000);
+app.listen(80, function () {
+  console.log("Keep running on port : 80");
+});
