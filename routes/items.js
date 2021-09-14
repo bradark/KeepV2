@@ -18,11 +18,20 @@ router.post('/additem', ensureAuthenticated, (req, res) => {
       if(err){
         console.log(err);
       }else{
-        console.log(docs);
+        User.findOneAndUpdate(
+          {email:req.user.email},
+          {$inc:{ inventorycount: 1 }},
+          function(err, docs){
+            if(err){
+              console.log(err);
+            }else{
+              res.redirect('/inventory');
+            }
+          }
+        )
       }
     }
   );
-  res.redirect('/inventory');
 })
 
 router.post('/removeitem/:itemsku', ensureAuthenticated, (req, res) => {
@@ -32,10 +41,22 @@ router.post('/removeitem/:itemsku', ensureAuthenticated, (req, res) => {
     function(err, docs){
       if(err){
         console.log(err);
+      }else{
+        User.findOneAndUpdate(
+          {email:req.user.email},
+          {$inc:{ inventorycount: -1 }},
+          function(err, docs){
+            if(err){
+              console.log(err);
+            }else{
+              res.redirect('/inventory');
+            }
+          }
+        )
       }
     }
   );
-  res.redirect('/inventory');
 })
+
 
 module.exports = router;

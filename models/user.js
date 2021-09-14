@@ -25,7 +25,13 @@ gmailtoken :{
 } ,
 
 inventorycount :{
-  type  : String,
+  type: Number,
+  required : false,
+  default:0
+} ,
+
+ordercount :{
+  type: Number,
   required : false,
   default:0
 } ,
@@ -45,6 +51,11 @@ sales :{
   required : false
 } ,
 
+orders :{
+  type : [],
+  required : false
+} ,
+
 intransitcount :{
   type  : String,
   required : false,
@@ -52,7 +63,7 @@ intransitcount :{
 } ,
 
 salescount :{
-  type  : String,
+  type  : Number,
   required : false,
   default:0
 } ,

@@ -19,6 +19,9 @@
                 <a class="nav-link" id="inventory" href="/inventory">Inventory</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" id="about" href="/orders">Orders</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" id="sales" href="/sales">Sales</a>
               </li>
               <li class="nav-item active">
@@ -38,18 +41,24 @@
         <h1 style="padding:50px;">Mail Tracker,</h1>
         <div id="card">
           <div class="container">
-            <div class="d-flex flex-row">
-              <div class="p-2" style="padding:10px;">
+            <div class="alert alert-info" role="alert">
+              <h4 class="alert-heading">What is Mail Tracker?</h4>
+              <p>Mail tracker watches your inbox for important emails.</p>
+              <hr>
+              <p class="mb-0">Track sales, refunds, orders, and more.</p>
+            </div>
+            <div style="margin-left:-21px;" class="d-flex flex-row">
+              <div class="p-2" >
                 <form  action="/gmailtracker/getmail" method="POST">
                   <div class="container">
-                    <button type="submit" class="btn btn-primary btn-block">Refresh</button>
+                    <button type="submit" class="btn btn-info btn-block">Parse</button>
                   </div>
                 </form>
               </div>
-              <div class="p-2" style="padding:10px;">
+              <div class="p-2" >
                 <form  action="<%= user.authlink %>" method="POST">
                   <div class="container">
-                    <button type="submit" class="btn btn-primary btn-block">Add Account</button>
+                    <button type="submit" class="btn btn-warning btn-block">Add Account</button>
                   </div>
                 </form>
               </div>

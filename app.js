@@ -20,7 +20,7 @@ var bodyParser = require('body-parser');
 require('./config/passport')(passport)
 //mongoose
 mongoose.connect('mongodb://localhost/test',{useNewUrlParser: true, useUnifiedTopology : true})
-.then(() => console.log('connected,,'))
+.then(() => console.log('Keep succesfully cpnnected to DB'))
 .catch((err)=> console.log(err));
 
 //EJS
@@ -50,6 +50,7 @@ app.use(express.static("resources"));
 app.use('/items',require('./routes/items'));
 app.use('/gmailtracker',require('./routes/gmailtracker'));
 app.use('/sales',require('./routes/sales'));
+app.use('/orders',require('./routes/orders'));
 app.use('/',require('./routes/index'));
 app.use('/users',require('./routes/users'));
 

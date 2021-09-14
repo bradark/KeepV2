@@ -2,7 +2,7 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 const User = require("../models/user");
-
+const MailParser = require("./mailparser.js");
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
@@ -11,12 +11,21 @@ const SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 // time.
 const TOKEN_PATH = 'token.json';
 
-// Load client secrets from a local file.
+
+module.exports.watchMail = function (keepEmail){
+  while(true){
+    setTimeout(function(){
+      console.log("Gmail Tracker [*LOG*] --> [CHECKING " + keepEmail + "\'s MAIL BOX]");
+      authorize(JSON.parse(content), keepEmail, getMail);
+    }, 5000);
+  }
+}
+
 module.exports.getMessages = function (keepEmail){
   fs.readFile('./gmailtracker/credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
     // Authorize a client with credentials, then call the Gmail API.
-    authorize(JSON.parse(content), keepEmail, listMessages);
+    authorize(JSON.parse(content), keepEmail, getMail);
   });
 }
 
@@ -35,7 +44,6 @@ function authorize(credentials, keepEmail, callback) {
     function(err, docs){
       const {client_secret, client_id} = credentials.installed;
       const oAuth2Client = new google.auth.OAuth2(client_id, client_secret);
-      console.log(docs[0]);
       var token = (docs[0]).gmailtoken;
       oAuth2Client.setCredentials({
         refresh_token: token
@@ -57,7 +65,7 @@ function authorize(credentials, keepEmail, callback) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listMessages(auth, keepEmail) {
+function getMail(auth, keepEmail) {
   const gmail = google.gmail({version: 'v1', auth: auth});
   gmail.users.messages.list({
     userId: 'me',
@@ -70,34 +78,7 @@ function listMessages(auth, keepEmail) {
           userId:'me',
           id: msg.id ,
         }, (err, res) => {
-          if(res.data.snippet.includes('refund')){
-            console.log(res.data.snippet);
-            User.update(
-              {email:keepEmail},
-              { $addToSet: {mail: {mailstate:"refund", mailsnippet:res.data.snippet}}},
-              function(err, docs){
-                if(err){
-                  console.log(err);
-                }else{
-                  console.log(docs);
-                }
-              }
-            );
-          }
-          if(res.data.snippet.includes('sold')){
-            console.log(res.data.snippet);
-            User.update(
-              {email:keepEmail},
-              { $addToSet: {mail: {mailstate:"sold item", mailsnippet:res.data.snippet}}},
-              function(err, docs){
-                if(err){
-                  console.log(err);
-                }else{
-                  console.log(docs);
-                }
-              }
-            );
-          }
+            MailParser.parseMail(keepEmail, res.data.snippet);
         });
       });
     } else {

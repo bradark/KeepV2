@@ -10,6 +10,7 @@ router.post('/getmail', ensureAuthenticated, (req, res) => {
   console.log(req.user);
   console.log(req.body);
   GmailTracker.getMessages(req.user.email);
+  //GmailTracker.watchMail(req.user.email);
   setTimeout(function(){
     res.redirect('/gmailtracker');
   }, 2000);

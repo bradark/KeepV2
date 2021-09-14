@@ -18,11 +18,20 @@ router.post('/addsale', ensureAuthenticated, (req, res) => {
       if(err){
         console.log(err);
       }else{
-        console.log(docs);
+        User.findOneAndUpdate(
+          {email:req.user.email},
+          {$inc:{ salescount: 1 }},
+          function(err, docs){
+            if(err){
+              console.log(err);
+            }else{
+              res.redirect('/sales');
+            }
+          }
+        )
       }
     }
   );
-  res.redirect('/sales');
 })
 
 router.post('/marksold', ensureAuthenticated, (req, res) => {
@@ -48,10 +57,21 @@ router.post('/removesale/:itemname', ensureAuthenticated, (req, res) => {
     function(err, docs){
       if(err){
         console.log(err);
+      }else{
+        User.findOneAndUpdate(
+          {email:req.user.email},
+          {$inc:{ salescount: -1 }},
+          function(err, docs){
+            if(err){
+              console.log(err);
+            }else{
+              res.redirect('/sales');
+            }
+          }
+        )
       }
     }
   );
-  res.redirect('/sales');
 })
 
 module.exports = router;

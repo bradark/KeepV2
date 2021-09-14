@@ -5,8 +5,15 @@ const {ensureAuthenticated} = require('../config/auth')
 router.get('/', (req,res)=>{
     res.render('welcome');
 })
+
+router.get('/account', ensureAuthenticated, (req,res)=>{
+    res.render('dashboard', {
+      user: req.user
+    });
+})
+
 //register page
-router.get('/register', (req,res)=>{
+router.get('/register', ensureAuthenticated, (req,res)=>{
     res.render('register');
 })
 
@@ -24,6 +31,12 @@ router.get('/inventory',ensureAuthenticated,(req,res)=>{
 
 router.get('/sales', ensureAuthenticated, (req, res) =>{
   res.render('sales',{
+    user: req.user
+  });
+})
+
+router.get('/orders', ensureAuthenticated, (req, res) =>{
+  res.render('orders',{
     user: req.user
   });
 })
