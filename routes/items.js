@@ -9,11 +9,13 @@ const {ensureAuthenticated} = require('../config/auth')
 router.post('/additem', ensureAuthenticated, (req, res) => {
   console.log(req.user);
   console.log(req.body);
-  var removeBtn = "<form action=\"/items/removeitem/" + req.body.itemsku + "\" method=\"POST\"><button type=\"submit\" id=\"removebtn\" class=\"btn btn-danger\" >Remove</button></form>";
+  var itemvalue = parseInt(req.body.itemvalue);
+  var itemsku = randomNum(1000, 10000);
+  var removeBtn = "<form action=\"/items/removeitem/" + itemsku + "\" method=\"POST\"><button type=\"submit\" id=\"removebtn\" class=\"btn btn-danger\" >Remove</button></form>";
   var markSoldBtn = "<a href=\"#\" value=\"" + req.body.itemname + "\" id=\"marksoldbtn\" class=\"btn btn-success\" >Mark Sold</a>";
   User.update(
     {email:req.user.email},
-    { $push: {inventory: {itemname:req.body.itemname, itemdescription:req.body.itemdescription, itemsku:req.body.itemsku, itemvalue:req.body.itemvalue, removebtn:removeBtn, marksoldbtn:markSoldBtn}}},
+    { $push: {inventory: {itemname:req.body.itemname, itemdescription:req.body.itemdescription, itemsku:itemsku, itemvalue:req.body.itemvalue, removebtn:removeBtn, marksoldbtn:markSoldBtn}}},
     function(err, docs){
       if(err){
         console.log(err);
@@ -25,7 +27,17 @@ router.post('/additem', ensureAuthenticated, (req, res) => {
             if(err){
               console.log(err);
             }else{
-              res.redirect('/inventory');
+              User.findOneAndUpdate(
+                {email:req.user.email},
+                {$inc:{ inventoryvalue: itemvalue }},
+                function(err, docs){
+                  if(err){
+                    console.log(err);
+                  }else{
+                    res.redirect('/inventory');
+                  }
+                }
+              )
             }
           }
         )
@@ -37,7 +49,7 @@ router.post('/additem', ensureAuthenticated, (req, res) => {
 router.post('/removeitem/:itemsku', ensureAuthenticated, (req, res) => {
   User.updateOne(
     {email:req.user.email},
-    { $pull: { inventory: { itemsku: req.param("itemsku") }}},
+    { $pull: { inventory: { itemsku: parseInt(req.param("itemsku")) }}},
     function(err, docs){
       if(err){
         console.log(err);
@@ -58,5 +70,10 @@ router.post('/removeitem/:itemsku', ensureAuthenticated, (req, res) => {
   );
 })
 
+function randomNum(min, max) {
+  return Math.floor(
+    Math.random() * (max - min) + min
+  )
+}
 
 module.exports = router;

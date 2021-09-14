@@ -30,7 +30,19 @@ inventorycount :{
   default:0
 } ,
 
+ordersvalue :{
+  type: Number,
+  required : false,
+  default:0
+} ,
+
 ordercount :{
+  type: Number,
+  required : false,
+  default:0
+} ,
+
+inventoryvalue :{
   type: Number,
   required : false,
   default:0

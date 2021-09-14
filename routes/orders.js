@@ -8,6 +8,7 @@ const {ensureAuthenticated} = require('../config/auth')
 router.post('/addorder', ensureAuthenticated, (req, res) => {
   console.log(req.user);
   console.log(req.body);
+  var ordervalue = parseInt(req.body.ordercost);
   var ordernumber = req.user.ordercount + 1 + randomNum(1000, 10000);
   var removeorderbtn = "<form action=\"/orders/removeorder/" + ordernumber + "\" method=\"POST\"><button type=\"submit\" id=\"removebtn\" class=\"btn btn-danger\" >Remove</button></form>";
   User.update(
@@ -24,7 +25,17 @@ router.post('/addorder', ensureAuthenticated, (req, res) => {
             if(err){
               console.log(err);
             }else{
-              res.redirect('/orders');
+              User.findOneAndUpdate(
+                {email:req.user.email},
+                {$inc:{ ordersvalue: ordervalue }},
+                function(err, docs){
+                  if(err){
+                    console.log(err);
+                  }else{
+                    res.redirect('/orders');
+                  }
+                }
+              )
             }
           }
         )

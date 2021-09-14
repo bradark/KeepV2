@@ -115,13 +115,6 @@
 
                       </div>
                       <br/>
-                      <div>
-                          <input
-                            name="itemsku"
-                            placeholder="Enter Item SKU..."
-                          />
-
-                      </div>
                       <br/>
                       <div>
                           <input
@@ -155,13 +148,19 @@
               <div class="p-2" style="padding:10px;">
                 <a id="trackgmailbtn" href="#" class="btn btn-warning" >+ Track Gmail</a>
               </div>
+              <div class="p-2" style="margin-left:50px;">
+                <h3>Value: </h3>
+              </div>
+              <div class="p-2">
+                <h3 style="color:green;">$<%= user.inventoryvalue %></h3>
+              </div>
             </div>
             <table data-url='x' id="table" data-toggle="table" class="table table-light">
               <thead class="thead-light">
                 <tr line-height="50px">
                   <th data-field="itemname">Item</th>
                   <th data-field="itemdescription">Item Description</th>
-                  <th data-field="itemsku">SKU</th>
+                  <th data-field="itemsku">Item #</th>
                   <th data-field="itemvalue">Value</th>
                   <th data-field="removebtn">Remove</th>
                   <th data-field="marksoldbtn">Mark Sold</th>
