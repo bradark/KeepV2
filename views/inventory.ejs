@@ -91,7 +91,7 @@
         </div>
         <div class="modal show" id="loadMe" tabindex="-1" role="dialog" aria-labelledby="loadMeLabel">
           <div class="modal-dialog modal-sm" role="document">
-            <div style="background-color: #36393F;" class="modal-content">
+            <div style="border-radius:10px; background-color: #36393F;" class="modal-content">
               <div  class="modal-body text-center">
                 <div class="loader"></div>
                 <div  class="loader-txt">
@@ -135,8 +135,8 @@
           </div>
         </div>
         <div style="padding-top:50px;" class="container">
-        <div style="max-width:1000px; border-radius:10px; background-color: #36393F; padding-top:16px;" id="card">
-          <div class="container">
+        <div style="max-width:1000px; border-radius:10px; background-color: #343A40;" id="card">
+          <div style="padding:20px;" class="container">
             <div class="alert alert-warning" role="alert">
               <h4 class="alert-heading">Inventory</h4>
               <p>Store items for better ineventory management</p>
@@ -160,6 +160,7 @@
                 <h3 style="color:#28A745;"><%= user.inventorycount %></h3>
               </div>
             </div>
+            <div style="height:250px; overflow:auto;" class="table-wrapper-scroll-y my-custom-scrollbar">
             <table data-url='x' id="table" data-toggle="table" class="table table-dark">
               <thead class="thead-dark">
                 <tr line-height="50px">
@@ -172,6 +173,7 @@
                 </tr>
               </thead>
             </table>
+          </div>
           </div>
         </div>
       </div>
