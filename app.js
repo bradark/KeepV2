@@ -45,6 +45,8 @@ app.use((req,res,next)=> {
     })
 
 app.use(express.static("resources"));
+app.use(express.static("Images"));
+
 
 //Routes
 app.use('/items',require('./routes/items'));
