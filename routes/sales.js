@@ -9,11 +9,11 @@ const {ensureAuthenticated} = require('../config/auth')
 router.post('/addsale', ensureAuthenticated, (req, res) => {
   console.log(req.user);
   console.log(req.body);
-  var removeBtn = "<form action=\"/sales/removesale/" + req.body.saleitem + "\" method=\"POST\"><button type=\"submit\" id=\"removebtn\" class=\"btn btn-danger\" >Remove</button></form>";
+  var removeBtn = "<form action=\"/sales/removesale/" + req.body.item + "\" method=\"POST\"><button type=\"submit\" id=\"removebtn\" class=\"btn btn-danger\" >Remove</button></form>";
   //var markSoldBtn = "<a id=\"marksoldbtn\" href=\"/marksold/" + req.body.itemsku + "\" class=\"btn btn-success\" >Mark Sold</a>";;
   User.update(
     {email:req.user.email},
-    { $push: {sales: {saleitem:req.body.saleitem, salemethod:req.body.salemethod, saleprice:req.body.saleprice, saleprofit:req.body.saleprofit, removebtn:removeBtn}}},
+    { $push: {sales: {saleitem:req.body.item, salemethod:req.body.cost, saleprice:req.body.saleprice, saleprofit:req.body.profit, removebtn:removeBtn}}},
     function(err, docs){
       if(err){
         console.log(err);
@@ -25,7 +25,27 @@ router.post('/addsale', ensureAuthenticated, (req, res) => {
             if(err){
               console.log(err);
             }else{
-              res.redirect('/sales');
+              User.findOneAndUpdate(
+                {email:req.user.email},
+                {$inc:{ revenue: parseInt(req.body.saleprice) }},
+                function(err, docs){
+                  if(err){
+                    console.log(err);
+                  }else{
+                    User.findOneAndUpdate(
+                      {email:req.user.email},
+                      {$inc:{ profit: parseInt(req.body.profit) }},
+                      function(err, docs){
+                        if(err){
+                          console.log(err);
+                        }else{
+                          res.redirect('/sales');
+                        }
+                      }
+                    )
+                  }
+                }
+              )
             }
           }
         )

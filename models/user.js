@@ -83,6 +83,14 @@ salescount :{
 date :{
     type : Date,
     default : Date.now
+} ,
+
+revenue :{
+  type : Number
+} ,
+
+profit :{
+  type : Number
 }
 });
 const User= mongoose.model('User',UserSchema);
