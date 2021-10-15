@@ -23,6 +23,12 @@ router.get('/dashboard',ensureAuthenticated,(req,res)=>{
     });
 })
 
+router.get('/newdashboard', ensureAuthenticated, (req, res) =>{
+  res.render('newdashboard',{
+    user: req.user
+  });
+})
+
 router.get('/inventory',ensureAuthenticated,(req,res)=>{
     res.render('inventory',{
         user: req.user
